@@ -19,7 +19,7 @@ function App() {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Enter something..."
+          placeholder="enter"
           value={inputValue}
           onChange={handleInputChange}
         />
