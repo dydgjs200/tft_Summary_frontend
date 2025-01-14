@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import "./App.css";
 import UserSearchForm from "./UserSearchForm.js";
 import UserInfoForm from "./UserInfoForm.js";
+import UserMatchForm from "./UserMatchListForm.js";
 
 function App() {
   const [UserInfo, setUserInfo] = useState(null);
+  const [UserMatch, setUserMatch] = useState(null);
 
   const handleSearchSubmit = async ({ gameName, region, tagLine }) => {
     try {
@@ -25,6 +27,7 @@ function App() {
 
       const data = await response.json();
       setUserInfo(data); // 결과를 state에 저장
+      setUserMatch(data.matchList);
     } catch (error) {
       console.error("Error:", error);
       alert("An error occurred while fetching player information.");
@@ -39,6 +42,9 @@ function App() {
 
       {/* 검색 결과 컴포넌트 */}
       <UserInfoForm userinfo={UserInfo} />
+
+      {/* 유저 매치리스트 컴포넌트 */}
+      <UserMatchForm userMatch={UserMatch} />
     </div>
   );
 }
