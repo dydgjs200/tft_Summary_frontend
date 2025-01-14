@@ -1,30 +1,50 @@
 import React, { useState } from "react";
 import "./App.css";
+import UserSearchForm from "./UserSearchForm.js";
+import UserInfoForm from "./UserInfoForm.js";
+import UserMatchForm from "./UserMatchListForm.js";
 
 function App() {
-  const [inputValue, setInputValue] = useState("");
+  const [UserInfo, setUserInfo] = useState(null);
+  const [UserMatch, setUserMatch] = useState(null);
 
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
+  const handleSearchSubmit = async ({ gameName, region, tagLine }) => {
+    try {
+      const response = await fetch(`http://localhost:5000/user/${gameName}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          region,
+          tagLine,
+        }),
+      });
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    alert(`Input Value: ${inputValue}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch player information");
+      }
+
+      const data = await response.json();
+      setUserInfo(data); // 결과를 state에 저장
+      setUserMatch(data.matchList);
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while fetching player information.");
+    }
   };
 
   return (
     <div className="App">
-      <h1>React Input Example</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Enter something..."
-          value={inputValue}
-          onChange={handleInputChange}
-        />
-        <button type="submit">Submit</button>
-      </form>
+      <h1>Fetch Player Info</h1>
+      {/* 검색창 컴포넌트 */}
+      <UserSearchForm onSubmit={handleSearchSubmit} />
+
+      {/* 검색 결과 컴포넌트 */}
+      <UserInfoForm userinfo={UserInfo} />
+
+      {/* 유저 매치리스트 컴포넌트 */}
+      <UserMatchForm userMatch={UserMatch} />
     </div>
   );
 }
