@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const API_KEY = process.env.API_KEY;
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 function UserMatchForm({ userMatch }) {
   const [matchDetails, setMatchDetails] = useState([]);
@@ -40,7 +40,7 @@ function UserMatchForm({ userMatch }) {
       <ul>
         {matchDetails.map((detail, index) => (
           <li key={index}>
-            <p>{detail}</p>
+            <p>{JSON.stringify(detail)}</p>
           </li>
         ))}
       </ul>
