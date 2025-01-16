@@ -40,7 +40,11 @@ function UserMatchForm({ userMatch }) {
       <ul>
         {matchDetails.map((detail, index) => (
           <li key={index}>
-            <p>{JSON.stringify(detail)}</p>
+            <p>{detail.metadata.participants}</p>
+            <p>
+              게임 날짜 :{" "}
+              {new Date(detail.info.game_datetime).toLocaleDateString()}
+            </p>
           </li>
         ))}
       </ul>
