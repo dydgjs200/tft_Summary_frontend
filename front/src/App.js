@@ -7,7 +7,10 @@ import UserMatchForm from "./UserMatchListForm.js";
 function App() {
   const [UserInfo, setUserInfo] = useState(null);
   const [UserMatch, setUserMatch] = useState(null);
+  const [TraitInfo, setTraitInfo] = useState(null);
+  const [activeFeature, setActiveFeature] = useState("matchSearch"); // 현재 활성화된 기능 상태
 
+  // 전적 검색 기능
   const handleSearchSubmit = async ({ gameName, region, tagLine }) => {
     try {
       const response = await fetch(`http://localhost:5000/user/${gameName}`, {
@@ -34,17 +37,54 @@ function App() {
     }
   };
 
+  // 시너지 검색 기능
+  const handleTraitearch = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/trait", {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch trait information");
+      }
+
+      const data = await response.json();
+      setTraitInfo(data); // 시너지 정보를 state에 저장
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while fetching trait information.");
+    }
+  };
+
   return (
     <div className="App">
       <h1>Fetch Player Info</h1>
-      {/* 검색창 컴포넌트 */}
-      <UserSearchForm onSubmit={handleSearchSubmit} />
 
-      {/* 검색 결과 컴포넌트 */}
-      <UserInfoForm userinfo={UserInfo} />
+      {/* 기능 선택 버튼 */}
+      <div>
+        <button onClick={() => setActiveFeature("matchSearch")}>
+          전적 검색
+        </button>
+        <button onClick={() => setActiveFeature("Traitearch")}>
+          시너지 검색
+        </button>
+      </div>
 
-      {/* 유저 매치리스트 컴포넌트 */}
-      <UserMatchForm userMatch={UserMatch} />
+      {/* 전적 검색 UI */}
+      {activeFeature === "matchSearch" && (
+        <>
+          <UserSearchForm onSubmit={handleSearchSubmit} />
+          <UserInfoForm userinfo={UserInfo} />
+          <UserMatchForm userMatch={UserMatch} />
+        </>
+      )}
+
+      {/* 시너지 검색 UI */}
+      {activeFeature === "Traitearch" && (
+        <div>
+          <p>시너지 검색</p>
+        </div>
+      )}
     </div>
   );
 }
