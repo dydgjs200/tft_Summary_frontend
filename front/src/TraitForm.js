@@ -44,8 +44,8 @@ function TraitGallery() {
               src={url}
               alt={`Trait ${index}`}
               style={{
-                width: "150px",
-                height: "150px",
+                width: "50px",
+                height: "50px",
                 objectFit: "cover",
               }}
             />
